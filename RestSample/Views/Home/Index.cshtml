@@ -1,0 +1,68 @@
+﻿<div id="body">
+    <ul id="payments"></ul>
+</div>
+
+<form id="savePaymentForm" method="post">
+    <h3>Create a new Payment Record</h3>
+    <p>
+        <label for="paymentId">Id:</label>
+        <input type="text" name="Id" />
+    </p>
+    <p>
+        <label for="paymentAppId">Application Id:</label>
+        <input type="number" name="ApplicationId" />
+    </p>
+    <p>
+        <label for="paymentType">Type:</label>
+        <input type="text" name="Type" />
+    </p>
+    <p>
+        <label for="paymentSummary">Summary:</label>
+        <input type="text" name="Summary" />
+    </p>
+    <p>
+        <label for="paymentAmount">Amount:</label>
+        <input type="number" name="Amount" />
+    </p>
+    <p>
+        <label for="paymentPostdate">Posting Date:</label>
+        <input type="datetime" name="PostingDate" />
+    </p>
+    <p>
+        <label for="paymentCleared">Is Cleared?:</label>
+        <input type="checkbox" name="IsCleared" />
+    </p>
+    <p>
+        <label for="paymentClearedDate">Cleared Date:</label>
+        <input type="datetime" name="ClearedDate" />
+    </p>
+    <input type="button" id="savePayment" value="Save" />
+</form>
+
+
+@section scripts{
+    <script type="text/javascript">
+$(function()
+{
+        $.getJSON('/api/payment', function(paymentsJsonPayload)
+        {
+            $(paymentsJsonPayload).each(function (i, item)
+            {
+                $('#payments').append('<li>' + item.Id + '</li>');
+            });
+        });
+});
+
+$('#savePayment').click(function () {
+    $.post("api/payment",
+          $("#savePaymentForm").serialize(),
+          function (value) {
+              $('#payments').append('<li>' + value.Id + '</li>');
+          },
+          "json"
+    );
+});
+
+
+    </script>
+}
